@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 class Timer extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.timer = React.createRef();
     this.state = {
@@ -18,6 +18,16 @@ class Timer extends Component {
       this.props.updateInterval * 1000
     );
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.time === nextState.time) {
+      return false
+    }
+    return true
+  }
+
+  componentDidUpdate() {
+    this.timer.current.style.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  }
 
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -25,6 +35,7 @@ class Timer extends Component {
 
   render() {
     const { time, color, logText } = this.state;
+
     return (
       <section className="Timer" style={{ background: color }} ref={this.timer}>
         <h1>{time}</h1>
